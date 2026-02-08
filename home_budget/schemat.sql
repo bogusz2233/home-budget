@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS property ( 
     id_p INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    creation_time TEXT NOT NULL,
+    
+    -- format: YYYY-MM
+    year_month_of_creation TEXT NOT NULL,
 
     name TEXT NOT NULL,
     type TEXT NOT NULL,

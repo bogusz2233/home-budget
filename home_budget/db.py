@@ -24,7 +24,9 @@ class Database:
     def connection(cls) -> sqlite3.Connection:
         with cls._DB_LOCK:
             if cls._CONNECTION is None:
-                cls._CONNECTION = sqlite3.connect(CONFIG.DB_NAME)
+                cls._CONNECTION = sqlite3.connect(
+                    CONFIG.DB_NAME, check_same_thread=False
+                )
 
         return cls._CONNECTION
 

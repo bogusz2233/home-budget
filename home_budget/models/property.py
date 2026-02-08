@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field
-from datetime import datetime
 from enum import StrEnum, auto
 from typing import Optional
+
+YEAR_MONTH_PATTERN = r"^\d{4}-(0[1-9]|1[0-2])$"
 
 
 class PropertyType(StrEnum):
@@ -24,8 +25,9 @@ class PropertyType(StrEnum):
 
 
 class Property(BaseModel):
-    creation_time: datetime = Field(
-        description="The time when the property was created",
+    year_month_of_creation: str = Field(
+        description="The year and month when the property was created in YYYY-MM format",
+        pattern=YEAR_MONTH_PATTERN,
     )
 
     name: str = Field(
@@ -58,14 +60,16 @@ class PropertyFilter(BaseModel):
         description="The name of the property to filter by",
     )
 
-    creation_time_min: Optional[datetime] = Field(
+    year_month_of_creation_min: Optional[str] = Field(
         default=None,
-        description="The minimum creation time of the property to filter by",
+        description="The minimum year and month of creation to filter by (YYYY-MM)",
+        pattern=YEAR_MONTH_PATTERN,
     )
 
-    creation_time_max: Optional[datetime] = Field(
+    year_month_of_creation_max: Optional[str] = Field(
         default=None,
-        description="The maximum creation time of the property to filter by",
+        description="The maximum year and month of creation to filter by (YYYY-MM)",
+        pattern=YEAR_MONTH_PATTERN,
     )
 
     creation_year: Optional[int] = Field(
