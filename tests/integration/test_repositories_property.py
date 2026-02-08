@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 import pytest
 
 from loguru import logger
@@ -11,9 +9,9 @@ from home_budget.repositories.property import PropertyRepository
 
 
 def test_insert_returns_property_db() -> None:
-    creation_time = datetime(2026, 2, 8, 12, 0, 0)
+    year_month_of_creation = "2026-02"
     property_item = Property(
-        creation_time=creation_time,
+        year_month_of_creation=year_month_of_creation,
         name="Wallet",
         type=PropertyType.CASH,
         amount=1200.50,
@@ -22,7 +20,7 @@ def test_insert_returns_property_db() -> None:
     inserted = PropertyRepository.insert(property_item)
 
     assert inserted.id_p > 0
-    assert inserted.creation_time == creation_time
+    assert inserted.year_month_of_creation == year_month_of_creation
     assert inserted.name == "Wallet"
     assert inserted.type == PropertyType.CASH
     assert inserted.amount == 1200.50

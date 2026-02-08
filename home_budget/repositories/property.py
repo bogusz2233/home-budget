@@ -4,7 +4,6 @@ from home_budget.models.property import (
     PropertyFilter,
     PropertyType,
 )
-from datetime import datetime
 from typing import List, Type, Self
 
 from home_budget.db import Database
@@ -28,23 +27,23 @@ class PropertyRepository:
             clauses.append("name = ?")
             params.append(filter.name)
 
-        if filter.creation_time_min is not None:
-            clauses.append("creation_time >= ?")
-            params.append(filter.creation_time_min.isoformat())
+        if filter.year_month_of_creation_min is not None:
+            clauses.append("year_month_of_creation >= ?")
+            params.append(filter.year_month_of_creation_min)
 
-        if filter.creation_time_max is not None:
-            clauses.append("creation_time <= ?")
-            params.append(filter.creation_time_max.isoformat())
+        if filter.year_month_of_creation_max is not None:
+            clauses.append("year_month_of_creation <= ?")
+            params.append(filter.year_month_of_creation_max)
 
         if filter.creation_year is not None:
-            clauses.append("strftime('%Y', creation_time) = ?")
+            clauses.append("substr(year_month_of_creation, 1, 4) = ?")
             params.append(f"{filter.creation_year:04d}")
 
         if filter.creation_month is not None:
-            clauses.append("strftime('%m', creation_time) = ?")
+            clauses.append("substr(year_month_of_creation, 6, 2) = ?")
             params.append(f"{filter.creation_month:02d}")
 
-        query = "SELECT id_p, creation_time, name, type, amount FROM property"
+        query = "SELECT id_p, year_month_of_creation, name, type, amount FROM property"
         if clauses:
             query += " WHERE " + " AND ".join(clauses)
 
@@ -54,7 +53,7 @@ class PropertyRepository:
         return [
             PropertyDB(
                 id_p=row[0],
-                creation_time=datetime.fromisoformat(row[1]),
+                year_month_of_creation=row[1],
                 name=row[2],
                 type=PropertyType(row[3]),
                 amount=row[4],
@@ -66,9 +65,9 @@ class PropertyRepository:
     def insert(cls: Type[Self], property: Property) -> PropertyDB:
         connection = Database.connection()
         cursor = connection.execute(
-            "INSERT INTO property (creation_time, name, type, amount) VALUES (?, ?, ?, ?)",
+            "INSERT INTO property (year_month_of_creation, name, type, amount) VALUES (?, ?, ?, ?)",
             (
-                property.creation_time.isoformat(),
+                property.year_month_of_creation,
                 property.name,
                 property.type.value,
                 property.amount,

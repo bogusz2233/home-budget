@@ -6,10 +6,7 @@ export class Formatter {
         }).format(value);
     }
 
-    static formatDate(value) {
-        return new Intl.DateTimeFormat("pl-PL", {
-            dateStyle: "medium",
-            timeStyle: "short",
-        }).format(new Date(value));
+    static formatYearMonth(value) {
+        return value || "—";
     }
 }

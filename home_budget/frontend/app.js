@@ -95,7 +95,7 @@ const createRowTemplate = (item) => `
       <div>${item.name}</div>
       <div>${Defines.PROPERTY_TYPES[item.type.toUpperCase()] || item.type}</div>
       <div>${Formatter.formatCurrency(item.amount)}</div>
-      <div>${Formatter.formatDate(item.creation_time)}</div>
+      <div>${Formatter.formatYearMonth(item.year_month_of_creation)}</div>
             <div>
                 <button class="danger icon-button" type="button" data-action="delete" data-id="${item.id_p}" aria-label="Delete">🗑️</button>
             </div>
@@ -129,7 +129,6 @@ const handleCreate = async (event) => {
     const payload = Object.fromEntries(data.entries());
     payload.type = payload.type.toLowerCase();
     payload.amount = Number(payload.amount);
-    payload.creation_time = new Date(payload.creation_time).toISOString();
 
     const response = await fetch("/api/properties", {
         method: "POST",
