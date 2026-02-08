@@ -16,5 +16,13 @@ source .venv/bin/activate
 ## Install dependencies
 Once you have virtual envirement setup you can install all dependencies by using command:
 ```bash
-pip install -r requirements.txt
+pip install -e .
 ```
+
+## Run API + UI
+Start the FastAPI server (serves the frontend at `/`):
+```bash
+uvicorn home_budget.app:app --reload
+```
+
+Open http://localhost:8000 to view the UI. The API is under `/api`.
